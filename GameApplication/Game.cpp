@@ -1,17 +1,9 @@
 #include "Game.h"
 /**
- * @brief Calculates the factorial of a number.
+ * @brief init all the variables that served the Game logic.
  *
- * @param
- *
- * @return
- *
- * @details
+ * @details: the basic mission of this function is to be used in the Game c'tor
  */
- /**
-  * @brief Calculates the factorial of a number.
-  *
-  */
 void Game::initVars()
 {
 	this->window = nullptr;
@@ -75,7 +67,7 @@ Game::Game()
 	this->initEnimies();
 }
 /**
- * @brief Calculates the factorial of a number.
+ * @brief D'tor of Game
  *
  */
 Game::~Game()
@@ -83,14 +75,19 @@ Game::~Game()
 	delete this->window;
 }
 /**
- * @brief Calculates the factorial of a number.
+ * @brief run the game while window is open 
  *
  */
 const bool Game::running() const
 {
 	return this->window->isOpen();
 }
-
+/**
+ * @brief End game according to the health score, so that we stored
+ * 
+ * this variable and it's getter/setter
+ *
+ */
 const bool Game::getEndGame() const
 {
 	return this->endGame;
@@ -99,7 +96,7 @@ const bool Game::getEndGame() const
 // ------------------------- Fucntions ---------------------
 
  /**
-  * @brief Calculates the factorial of a number.
+  * @brief pending to catch an event from keyboard/Mouse.
   *
   */
 void Game::pollEvents()
@@ -120,7 +117,7 @@ void Game::pollEvents()
 
 }
 /**
- * @brief Calculates the factorial of a number.
+ * @brief update Game while endGame = 1
  *
  */
 void Game::update()
@@ -277,7 +274,7 @@ void Game::updateEnimies()
 	}
 }
 /**
- * @brief TBD
+ * @brief render objects/Rectangles
  *
  */
 void Game::renderEnimies(sf::RenderTarget& target)
@@ -286,7 +283,10 @@ void Game::renderEnimies(sf::RenderTarget& target)
 		target.draw(e);
 	}
 }
-
+/**
+ * @brief update text according to the Points/health score that the user has accumulate 
+ *
+ */
 void Game::updateText()
 {
 	std::stringstream ss;
@@ -294,7 +294,10 @@ void Game::updateText()
 		<< "Health: " << this->health << std::endl;
 	this->uiText.setString(ss.str());
 }
-
+/**
+ * @brief used to render text on window (int render function)
+ *
+ */
 void Game::renderText(sf::RenderTarget& target)
 {
 	target.draw(this->uiText);
