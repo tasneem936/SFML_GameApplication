@@ -16,12 +16,12 @@ void Game::initVars()
 {
 	this->window = nullptr;
 	this->endGame = false;
-	this->enemySpawnTimerMax = 10.f;
+	this->enemySpawnTimerMax = 20.f;
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
 	this->maxEnimies = 10;
 	this->points = 0;
 	this->mouseHeld = false;
-	this->health = 10;
+	this->health = 20;
 }
 /**
  * @brief Calculates the factorial of a number.
@@ -162,7 +162,7 @@ void Game::updateMousePosition()
 	this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
 }
 /**
- * @brief spawn enimies and set their color and position
+ * @brief spawn enimies and set their color and position **Randomlly**
  * set a random position, color, and add enemy to the vector.
  * 
  * @return void 
@@ -174,7 +174,36 @@ void Game::spawnEnimies()
 		static_cast<float>(rand() % static_cast<int>((this->window->getSize().x) - this->enemy.getSize().x)),
 		0.f
 	);
-	this->enemy.setFillColor(sf::Color::Green);
+	
+	int type = rand() % 5;
+
+	switch (type) {
+	case 0:
+		this->enemy.setSize(sf::Vector2f(60.f, 60.f));
+		this->enemy.setFillColor(sf::Color::Magenta);
+		break;
+	case 1:
+		this->enemy.setSize(sf::Vector2f(90.f, 90.f));
+		this->enemy.setFillColor(sf::Color::Blue);
+		break;
+	case 2:
+		this->enemy.setSize(sf::Vector2f(110.f, 110.f));
+		this->enemy.setFillColor(sf::Color::Cyan);
+		break;
+	case 3:
+		this->enemy.setSize(sf::Vector2f(70.f, 70.f));
+		this->enemy.setFillColor(sf::Color::Red);
+		break;
+	case 4:
+		this->enemy.setSize(sf::Vector2f(160.f, 160.f));
+		this->enemy.setFillColor(sf::Color::Green);
+		break;
+
+	default:
+		this->enemy.setSize(sf::Vector2f(200.f, 200.f));
+		this->enemy.setFillColor(sf::Color::Yellow);
+		break;
+	}
 	this->enimies.push_back(this->enemy);
 
 
@@ -205,7 +234,6 @@ void Game::updateEnimies()
 		if (this->enimies[i].getPosition().y > this->window->getSize().y) {
 			this->enimies.erase(this->enimies.begin() + i);
 			health -= 1;
-			std::cout << "Health :" << health << std::endl;
 		}
 	}
 
@@ -216,14 +244,30 @@ void Game::updateEnimies()
 			bool deleted = false;
 			for (int i = 0; i < this->enimies.size() && deleted == false; i++) {
 				if (enimies[i].getGlobalBounds().contains(this->mousePosView)) {
+					//Gain points
+					if (this->enimies[i].getFillColor() == sf::Color::Magenta) {
+						this->points += 10.f;
+					}
+					else if (this->enimies[i].getFillColor() == sf::Color::Blue) {
+						this->points += 5.f;
+					}
+					else if (this->enimies[i].getFillColor() == sf::Color::Cyan) {
+						this->points += 7.f;
+					}
+					else if (this->enimies[i].getFillColor() == sf::Color::Red) {
+						this->points += 3.f;
+					}
+					else if (this->enimies[i].getFillColor() == sf::Color::Green) {
+						this->points += 1.f;
+					}
+					else {
+						std::cout << "Error: cannot Gain points" << std::endl;
+					}
 
 					// delete the enemy
 					this->enimies.erase(this->enimies.begin() + i);
 					deleted = true;
 
-					//Gain points
-					this->points += 1.f;
-					std::cout << "Points :" << points << std::endl;
 				}
 			}
 		}
